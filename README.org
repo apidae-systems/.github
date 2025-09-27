@@ -3,5 +3,5 @@
 [[./public/apidae-systems-banner.png]]
 
 
-| [[https://apidaesystems.ca][Website]]              | [[https://docs.apidaesystems.ca][Docs]] | [[https://arch.apidaesystems.ca][Architecture]]          | [[https://slides.apidaesystems.ca][Slides]] |
-| [[./public/website.png]] |      | [[./public/c4-model.png]] |        |
+| [[https://apidaesystems.ca][Website]]              | [[https://docs.apidaesystems.ca][Docs]]              | [[https://arch.apidaesystems.ca][Architecture]]          | [[https://graph.apidaesystems.ca][Graph]]              | [[https://slides.apidaesystems.ca][Slides]]              |
+| [[./public/website.png]] | [[./public/docs.png]] | [[./public/c4-model.png]] | [[./public/graph.png]] | [[./public/slides.png]] |

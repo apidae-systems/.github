@@ -1,0 +1,3 @@
+[build]
+command = "nx build docs --verbose"
+publish = "docs/dist"
