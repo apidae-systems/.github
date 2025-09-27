@@ -1,0 +1,60 @@
+# ===== ci(test) ======
+name: 🧪 Unit & E2E Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches: ["*"]
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+
+    steps:
+      - name: 🛎 Checkout Code
+        uses: actions/checkout@v4
+        with:
+          filter: tree:0
+          fetch-depth: 0
+
+      - name: ❄ Install Nix
+        uses: cachix/install-nix-action@v26
+
+      - uses: cachix/cachix-action@v14
+        with:
+          name: devenv
+
+      # - name: 🟦 Install Devenv
+      #   run: nix profile install nixpkgs#devenv
+
+      - name: 🟨 Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.17.1
+          run_install: false
+
+      - name: 🟩 Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.8
+          cache: "pnpm"
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: 📦 Install dependencies
+        run: pnpm i --frozen-lockfile
+
+      - name: 🏗 Build & Test
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        # run: devenv shell nx run-many -t build test e2e --parallel
+        run: pnpm nx run-many -t build --parallel
