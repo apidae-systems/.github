@@ -2,5 +2,5 @@
 
 Source code for Apidae System's website, documentation, slide deck, & design system.
 
-| Website | Docs | Architecture | Slides |
+| [[https://apidaesystems.ca][Website]] | [[https://docs.apidaesystems.ca][Docs]] | [[https://arch.apidaesystems.ca][Architecture]] | [[https://slides.apidaesystems.ca][Slides]] |
 |         |      |              |        |

@@ -1,4 +1,6 @@
 # yaml-language-server: $schema=https://devenv.sh/devenv.schema.json
+imports:
+  - ./apps/microvisor
 allowUnfree: true
 inputs:
   nixpkgs:

@@ -1,10 +1,90 @@
 packages:
+  - apps/*
+  - docs/*
+  - libs/*
   - packages/*
 
 autoInstallPeers: true
-
-onlyBuiltDependencies:
-  - '@swc/core'
-  - nx
-
+linkWorkspacePackages: true
 strictPeerDependencies: false
+onlyBuiltDependencies:
+  - '@apollo/protobufjs'
+  - '@compodoc/compodoc'
+  - '@nestjs/core'
+  - '@parcel/watcher'
+  - '@scarf/scarf'
+  - '@swc/core'
+  - esbuild
+  - supertest
+  - nx
+  - oxc-resolver
+  - unrs-resolver
+
+catalog:
+  '@apollo/server': ^4.12.2
+  '@biomejs/biome': ^2.2.4
+  '@compodoc/compodoc': ^1.1.30
+  '@mkvlrn/config': ^2.0.19
+  '@mkvlrn/result': ^4.0.16
+  '@nestjs/apollo': ^13.1.0
+  '@nestjs/common': ^11.1.6
+  '@nestjs/config': ^4.0.2
+  '@nestjs/core': ^11.1.6
+  '@nestjs/graphql': ^13.1.0
+  '@nestjs/platform-express': ^11.1.6
+  '@nestjs/platform-socket.io': ^11.1.6
+  '@nestjs/schematics': ^11.0.7
+  '@nestjs/serve-static': ^5.0.3
+  '@nestjs/swagger': ^11.2.0
+  '@nestjs/testing': ^11.1.6
+  '@nestjs/websockets': ^11.1.6
+  '@nestjs/cli': ^11.0.10
+  '@nx/js': 21.5.2
+  '@nx/nest': 21.5.2
+  '@nx/node': 21.5.2
+  '@nx/vite': ^21.5.2
+  '@nx/web': 21.5.2
+  '@nx/workspace': 21.5.2
+  '@scalar/nestjs-api-reference': ^1.0.1
+  '@statelyai/inspect': ^0.4.0
+  '@swc-node/register': ~1.11.1
+  '@swc/cli': ^0.7.8
+  '@swc/core': ~1.13.5
+  '@swc/helpers': ~0.5.17
+  '@types/express': ^5.0.3
+  '@types/node': 24.3.1
+  '@types/supertest': ^6.0.3
+  '@vitest/coverage-v8': ^3.2.4
+  '@vitest/ui': ^3.2.4
+  get-port: ^7.1.0
+  graphql: ^16.11.0
+  graphql-request: ^7.2.0
+  graphql-voyager: ^2.1.0
+  gray-matter: ^4.0.3
+  likec4: ^1.39.5
+  node-modules-inspector: ^1.1.1
+  nx: 21.5.2
+  pino-pretty: ^13.1.1
+  reflect-metadata: ^0.2.2
+  rxjs: ^7.8.2
+  supertest: ^7.1.4
+  swc-loader: ^0.2.6
+  ts-node: 10.9.2
+  tsc-alias: ^1.8.16
+  tsc-files: ^1.1.4
+  tslib: ^2.8.1
+  tsup: ^8.5.0
+  tsx: ^4.20.5
+  typescript: ~5.9.2
+  vite: ^7.1.5
+  vite-node: ^3.2.4
+  vite-tsconfig-paths: ^5.1.4
+  tsconfig-paths: ^4.2.0
+  ts-loader: ^9.5.4
+  superjson: ^2.2.2
+  class-transformer: ^0.5.1
+  class-validator: ^0.14.2
+  vitest: ^3.2.4
+  vue-tsc: ^3.0.6
+  xstate: ^5.21.0
+  zod: ^4.1.8

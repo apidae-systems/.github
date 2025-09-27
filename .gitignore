@@ -1,49 +1,100 @@
-.devenv*
-devenv.local.nix
+#====================================================
+#              Environment Variables
+#====================================================
+.env
+.env.*
+**/.env
+**/.env.*
 
-.direnv
-
-.pre-commit-config.yaml
-
-# compiled output
+#====================================================
+#               Build/Test Outputs
+#====================================================
+apps/api/docs
 dist
 tmp
 out-tsc
+**/.coverage
+**/coverage.xml
+**/dist
+**/bin
+**/.swc
+**/target
+**/.next
+**/.react-router
+**/out
+**/build
+**/generated
+**/playwright-report
+**/test-results
+**/.nyc_output
+**/coverage
+**/storybook-static
+**/coverage
+**/*.tsbuildinfo
+**/next-env.d.ts
+**/*.tar.gz
+**/.vercel
+**/.netlify
+**/.drizzle
 
-# dependencies
-node_modules
-
-# IDEs and editors
-/.idea
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
-
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-
-# misc
-/.sass-cache
-/connect.lock
-/coverage
-/libpeerconnection.log
-npm-debug.log
-yarn-error.log
-testem.log
-/typings
-
-# System Files
-.DS_Store
-Thumbs.db
-
+#====================================================
+#                 Caches & Logs
+#====================================================
+.open-webui
+.webui_secret_key
+.pre-commit-config.yaml
 .nx/cache
 .nx/workspace-data
 .cursor/rules/nx-rules.mdc
 .github/instructions/nx.instructions.md
+.devenv*
+devenv.local.nix
+.direnv
+**/.direnv/
+**.qcow2
+**/postgresql.log
+logs
+*.log
+pnpm-debug.log*
+**/.temp
+**/.tmp
+**/temp
+**/tmp
+vite.config.*.timestamp*
+vitest.config.*.timestamp*
+
+#====================================================
+#                  Dependencies
+#====================================================
+node_modules
+**/node_modules
+/.pnp
+.pnp.js
+
+#====================================================
+#                  Miscellaneous
+#====================================================
+.DS_Store
+Thumbs.db
+*.pem
+*tmp*
+.idea/
+.project
+.classpath
+.c9
+*.launch
+.vscode/*
+.settings
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/settings-example.json
+apps/microvisor/services/supabase/.branches
+apps/microvisor/env_spec.sh
+apps/microvisor/.shellspec
+/typings
+/libpeerconnection.log
+.claude
+apps/microvisor/env_spec.sh
+.shellspec
