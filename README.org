@@ -1,6 +1,7 @@
-* [[https://apidaesystems.ca][Apidae Systems]]
+#+ATTR_HTML: :align center
+#+ATTR_ORG: :align center
+[[./public/apidae-systems-banner.png]]
 
-Source code for Apidae System's website, documentation, slide deck, & design system.
 
-| [[https://apidaesystems.ca][Website]] | [[https://docs.apidaesystems.ca][Docs]] | [[https://arch.apidaesystems.ca][Architecture]] | [[https://slides.apidaesystems.ca][Slides]] |
-|         |      |              |        |
+| [[https://apidaesystems.ca][Website]]              | [[https://docs.apidaesystems.ca][Docs]] | [[https://arch.apidaesystems.ca][Architecture]]          | [[https://slides.apidaesystems.ca][Slides]] |
+| [[./public/website.png]] |      | [[./public/c4-model.png]] |        |

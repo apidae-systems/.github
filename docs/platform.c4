@@ -1,0 +1,178 @@
+model {
+    context platform {
+        title: "Platform"
+        icon: https://avatars.githubusercontent.com/u/234676047?s=200&v=4
+        link: https://apidaesystems.ca
+        link: https://github.com/apidae-systems
+
+        style {
+            color: yellow-600
+            opacity: 30%
+        }
+
+    component data-loggers {
+        title: "Data Loggers"
+        icon: tech:embedded-c
+        style {
+            opacity: 50%
+            color: yellow-600
+        }
+
+        container trigona {
+        title: "Trigona"
+        icon: ../public/trigona.png
+        description: "Utilizing LoRaWAN technology, and built to transmit data from the most challenging and isolated environments where power and traditional networks are unavailable. Perfect for research in remote rural areas, dense forests, and off-grid locations. We tailor each logger to your project's power and networking requirements, ensuring you can deploy a single unit or a vast, customized network across remote areas."
+
+        style {
+            opacity: 50%
+            color: yellow-600
+        }
+}
+
+        container ceratina {
+        title: "Ceratina"
+        icon: ../public/ceratina.png
+        description: "Reliable, high-frequency data collection in connected environments.
+        - Wi-Fi or GSM, it ideal for research in smart cities, intelligent buildings, and any location with network access.
+        Comes ready for high data throughput and scalability, customized to integrate seamlessly with your specific sensors and research protocols."
+        style {
+            opacity: 50%
+            color: yellow-600
+        }
+}
+
+        container nomia {
+        title: "Nomia"
+        icon: ../public/nomia.png
+        description: "Most affordable and compact solution for long-term data collection where connectivity is not required. It logs data directly to an SD card, making it a simple 'fire and forget' tool. Its key feature is its adaptability; we can customize it to operate for a couple of years on a single battery and ensure its small form factor fits the precise, discreet needs of your experiment."
+        style {
+            opacity: 50%
+            color: yellow-600
+        }
+}
+      }
+
+    component website {
+        title: "Website"
+        icon: tech:rust
+        link: https://apidaesystems.ca
+        style {
+            opacity: 50%
+            color: amber
+            shape: browser
+        }
+      }
+
+    component docs-site {
+        title: "Docs"
+        icon: tech:rust
+        link: https://docs.apidaesystems.ca
+        style {
+            opacity: 50%
+            color: amber
+            shape: browser
+        }
+      }
+
+
+    component api {
+        title: "API"
+        icon: tech:rust
+        style {
+            opacity: 50%
+            color: orange-600
+            shape: queue
+        }
+      }
+
+
+component tech-stack {
+    title: "Tech Stack"
+    style {
+        opacity: 50%
+        color: indigo
+        shape: queue
+    }
+
+    component cpp {
+        title: "C++"
+        icon: tech:cplusplus
+        link: https://cplusplus.com
+        style {
+            color: gray-800
+            opacity: 50%
+        }
+      }
+
+    component postgres {
+        title: "Postgres"
+        icon: tech:postgresql
+        link: https://www.postgresql.org
+        style {
+            color: cyan-800
+            opacity: 50%
+            shape: storage
+        }
+      }
+
+
+    container nx {
+        title: "Nx"
+        icon: https://avatars.githubusercontent.com/u/23692104?s=200&v=4.svg
+        description: "Monorepo Manager"
+        link : https://nx.dev
+        style {
+            color: gray-500
+        }
+    }
+
+    component microvisor {
+        title: "Microvisor"
+        icon: https://raw.githubusercontent.com/MFarabi619/MFarabi619/aabb74c23a1e4525b985d511bbe012606215027d/assets/nix-mfarabi.svg
+        style {
+            color: purple-600
+            opacity: 50%
+        }
+
+    component nix {
+        title "Nix"
+        link https://nixos.org "Website"
+        icon tech:nix
+        style {
+            color: amber
+            opacity: 40%
+        }
+    }
+
+    component devenv {
+        link https://devenv.sh "Website"
+        icon https://raw.githubusercontent.com/cachix/devenv/85e78cbe26467a2c23c9d34869235740132d749f/logos/devenv-dark-bg.svg
+        style {
+            color: gray
+        }
+    }
+      }
+}
+
+    }
+
+   platform -> external-providers.github {
+   title: "hosted on"
+}
+
+    data-loggers -> external-providers.gitlab {
+        title: "hosted on"
+    }
+
+    postgres -> external-providers.supabase {
+        title: "hosted on"
+    }
+
+    website -> external-providers.netlify {
+        title: "hosted on"
+    }
+
+    api -> external-providers.hetzner {
+        title: "hosted on"
+    }
+}

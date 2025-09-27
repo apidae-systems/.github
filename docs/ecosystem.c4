@@ -1,0 +1,34 @@
+model {
+    context ecosystem {
+        title: "Ecosystem"
+        icon: https://upload.wikimedia.org/wikipedia/commons/c/cf/Flag_of_Canada.svg
+        link: https://agriculture.canada.ca/en
+
+        style {
+            color: green
+            opacity: 50%
+        }
+
+        component ario {
+            title: "Ario"
+            description: "Agricultural Research and Innovation Ontario"
+            icon: https://www.adaptcouncil.org/uploads/pages/lg/ARIO-Logo-RGB-01_1.webp
+            link: https://www.ontario.ca/page/agricultural-research-and-innovation-ontario
+
+        style {
+            color: green
+            opacity: 50%
+        }
+  }
+
+
+    ecosystem -> platform {
+        title: "uses"
+    }
+
+    platform -> external-providers {
+        title: "relies on"
+    }
+}
+
+}

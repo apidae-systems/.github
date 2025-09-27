@@ -1,0 +1,25 @@
+{
+  "name": "docs",
+  "projectType": "application",
+  "sourceRoot": "docs",
+  "metadata": {
+    "description": "Docs"
+  },
+  "tags": ["docs"],
+  "targets": {
+    "dev": {
+      "continuous": true,
+      "command": "likec4 dev",
+      "options": {
+        "cwd": "docs"
+      }
+    },
+    "build": {
+      "command": "likec4 build",
+      "options": {
+        "cwd": "docs"
+      }
+    }
+  },
+  "$schema": "../../node_modules/nx/schemas/project-schema.json"
+}

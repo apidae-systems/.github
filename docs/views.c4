@@ -1,0 +1,39 @@
+views {
+    view index {
+        title: "System Context"
+        description: "Top-level Overview"
+        include *
+        exclude external-providers -> platform
+    }
+
+    view platform of platform {
+        title: "Apidae Systems Platform"
+            include *
+            include data-loggers.*
+            include tech-stack.*
+            include external-providers.software-development._
+	}
+
+    view tech-stack of platform.tech-stack {
+        title: "Tech Stack"
+            include *
+	}
+
+
+    view mirovisor of platform.microvisor {
+        title: "Microvisor"
+            include *
+	}
+
+    view ecosystem of ecosystem {
+        title: "Ecosystem"
+            include *
+	}
+
+    view external-providers of external-providers {
+        include *
+        include google.*
+        include ui-ux-design.*
+        include software-development.*
+    }
+}
