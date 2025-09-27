@@ -1,0 +1,43 @@
+{
+  "name": "@apidae-systems/source",
+  "version": "1.0.0",
+  "packageManager": "pnpm@10.17.0",
+  "license": "GPL-3.0-only",
+  "homepage": "https://github.com/apidae-systems/platform",
+  "bugs": {
+    "url": "https://github.com/apidae-systems/platform/issues",
+    "email": "info@apidaesystems.ca"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apidae-systems/platform.git"
+  },
+  "type": "module",
+  "keywords": [
+    "nx",
+    "wxt",
+    "mdx",
+    "nix",
+    "react",
+    "pulumi",
+    "likec4",
+    "fumadocs",
+    "monorepo",
+    "storybook",
+    "playwright",
+    "payloadcms",
+    "drizzle-orm",
+    "serenity-js",
+    "tailwindcss",
+    "trunk-based-development"
+  ],
+  "devDependencies": {
+    "nx": "21.5.3",
+    "@nx/js": "21.5.3",
+    "@swc-node/register": "~1.9.1",
+    "@swc/core": "~1.5.7",
+    "@swc/helpers": "~0.5.11",
+    "tslib": "^2.3.0",
+    "typescript": "~5.9.2"
+  }
+}
