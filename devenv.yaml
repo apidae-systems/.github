@@ -1,4 +1,6 @@
 inputs:
+  nixpkgs-unstable:
+    url: github:nixos/nixpkgs/nixpkgs-unstable
   esp32s3-idf:
     url: github:mirrexagon/nixpkgs-esp-dev
     inputs:
@@ -6,8 +8,6 @@ inputs:
         follows: nixpkgs-unstable
   nixpkgs:
     url: github:cachix/devenv-nixpkgs/rolling
-  nixpkgs-unstable:
-    url: github:nixos/nixpkgs/nixpkgs-unstable
   rust-overlay:
     url: github:oxalica/rust-overlay
     inputs:
