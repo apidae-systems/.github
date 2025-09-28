@@ -9,8 +9,9 @@ views {
     view platform of platform {
         title: "Apidae Systems Platform"
             include *
-            include data-loggers.*
+            include hardware.*
             include tech-stack.*
+            include data-loggers.*
             include external-providers.software-development._
 	}
 
@@ -35,5 +36,6 @@ views {
         include google.*
         include ui-ux-design.*
         include software-development.*
+        include marketing-and-communication.*
     }
 }

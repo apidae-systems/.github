@@ -94,6 +94,68 @@ component tech-stack {
         shape: queue
     }
 
+    component hardware {
+        title: "Hardware"
+    style {
+        opacity: 50%
+        color: yellow-400
+    }
+
+    container esp32 {
+        title: "ESP32"
+        icon: https://www.mouser.ca/images/espressifsystems/lrg/ESP32-DevKitC-32E_SPL.jpg
+        link: https://arduino.cc
+        style {
+            color: orange-700
+            opacity: 50%
+        }
+
+        }
+
+    container arduino {
+        title: "Arduino"
+        icon: tech:arduino
+        link: https://arduino.cc
+        style {
+            color: pink-800
+            opacity: 50%
+        }
+
+        }
+
+    container raspberry-pi {
+        title: "Raspberry Pi"
+        icon: tech:raspberrypi
+        link: https://raspberrypi.com
+        style {
+            color: amber
+            opacity: 50%
+        }
+
+
+        }
+        }
+
+    component arduino-cpp {
+        title: "Arduino"
+        icon: tech:arduino
+        link: https://arduino.cc
+        style {
+            color: amber
+            opacity: 50%
+        }
+      }
+
+    component platformio {
+        title: "PlatformIO"
+        icon: https://upload.wikimedia.org/wikipedia/commons/c/cd/PlatformIO_logo.svg
+        link: https://platformio.org
+        style {
+            color: slate-800
+            opacity: 50%
+        }
+      }
+
     component cpp {
         title: "C++"
         icon: tech:cplusplus
@@ -168,11 +230,11 @@ component tech-stack {
         title: "hosted on"
     }
 
-    website -> external-providers.netlify {
+    website -> external-providers.cloudflare {
         title: "hosted on"
     }
 
-    api -> external-providers.hetzner {
+    api -> external-providers.garnix {
         title: "hosted on"
     }
 }
