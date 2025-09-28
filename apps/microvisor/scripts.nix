@@ -19,6 +19,7 @@
         figlet
         shellspec
       ];
+
       description = " 💊 Run Microdoctor health-check suite with docs output";
       exec = ''
         figlet -cf slant "💊 Microdoctor";

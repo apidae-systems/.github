@@ -1,9 +1,5 @@
 {
   files = {
-    "apps/microvisor/.shellspec" = {
-      text = "";
-    };
-
     "apps/microvisor/env_spec.sh" = {
       executable = true;
       text = ''

@@ -92,7 +92,6 @@ Thumbs.db
 !.vscode/settings-example.json
 apps/microvisor/services/supabase/.branches
 apps/microvisor/env_spec.sh
-apps/microvisor/.shellspec
 /typings
 /libpeerconnection.log
 .claude

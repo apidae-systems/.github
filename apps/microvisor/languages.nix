@@ -1,7 +1,11 @@
-{pkgs,...}:
+{
+  pkgs,
+  ...
+}:
 {
   languages = {
     nix.enable = true;
+    shell.enable = true;
     typescript.enable = true;
     javascript = {
       enable = true;
