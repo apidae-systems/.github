@@ -44,6 +44,7 @@ in
     ./cachix.nix
     ./files.nix
     ./languages
+    ./packages.nix
     # ./git-hooks.nix
     ./scripts.nix
   ];
@@ -74,27 +75,6 @@ in
     CORS_WHITELIST_ORIGINS = "${ADMIN_LOCAL_URL},${ADMIN_LOCAL_URL}";
     CSRF_WHITELIST_ORIGINS = "${ADMIN_LOCAL_URL},${ADMIN_LOCAL_URL}";
   };
-
-  packages =
-    with pkgs;
-    [
-      espup
-      esptool
-      esphome
-      espflash
-      esp-generate
-      probe-rs
-
-
-      ninja
-      ccache
-      dfu-util
-
-      pulumi-esc
-    ]
-    ++ lib.optionals (!(config.container.isBuilding or false)) [
-      glab
-    ];
 
   process = {
     manager.args."theme" = "One Dark";
