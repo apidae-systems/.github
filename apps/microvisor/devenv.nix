@@ -78,6 +78,9 @@ in
   packages =
     with pkgs;
     [
+      ninja
+      ccache
+      dfu-util
       pulumi-esc
     ]
     ++ lib.optionals (!(config.container.isBuilding or false)) [ glab ];
