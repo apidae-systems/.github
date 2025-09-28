@@ -43,7 +43,7 @@ in
   imports = [
     ./cachix.nix
     ./files.nix
-    ./languages.nix
+    ./languages
     # ./git-hooks.nix
     ./scripts.nix
   ];
