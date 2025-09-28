@@ -78,12 +78,23 @@ in
   packages =
     with pkgs;
     [
+      espup
+      esptool
+      esphome
+      espflash
+      esp-generate
+      probe-rs
+
+
       ninja
       ccache
       dfu-util
+
       pulumi-esc
     ]
-    ++ lib.optionals (!(config.container.isBuilding or false)) [ glab ];
+    ++ lib.optionals (!(config.container.isBuilding or false)) [
+      glab
+    ];
 
   process = {
     manager.args."theme" = "One Dark";
