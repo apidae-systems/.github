@@ -6,6 +6,8 @@
   packages =
     with pkgs;
     [
+      binsider
+
       espup
       esptool
       esphome
