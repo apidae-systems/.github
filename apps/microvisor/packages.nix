@@ -12,8 +12,9 @@
       esptool
       esphome
       espflash
-      esp-generate
       probe-rs
+      esp-generate
+      cargo-espmonitor
 
       ninja
       ccache
