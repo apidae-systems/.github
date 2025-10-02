@@ -1,0 +1,30 @@
+profiles:
+  apidae:
+    notes: scaffolding code for co2 sensor on esp32s3
+    fqbn: esp32:esp32:esp32s3
+    # port: /dev/ttyACM0
+    port: /dev/ttyUSB0
+    port_config:
+      baudrate: 115200
+    platforms:
+      - platform: esp32:esp32 (3.3.0)
+    libraries:
+      - XENSIV PAS CO2 (3.2.1)
+    verbose: true
+
+default_port_config:
+  baudrate: 115200
+default_profile: apidae
+default_protocol: serial
+default_port: /dev/ttyUSB0
+default_programmer: esptool
+default_fqbn: esp32:esp32:esp32s3
+
+# http://wiki.fluidnc.com/en/hardware/ESP32-S3_Pin_Reference
+
+# arduino-cli lib examples
+
+# arduino-cli board list
+# arduino-cli core install esp32:esp32
+# arduino-cli compile -evtu --clean
+# arduino-cli monitor --log
