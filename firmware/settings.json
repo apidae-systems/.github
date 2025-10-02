@@ -1,0 +1,61 @@
+{
+  "breadcrumbs.enabled": true,
+  "terminal.integrated.copyOnSelection": true,
+  "window":{
+      "titleBarStyle": "native",
+  "zoomLevel": 0,
+  "menuBarVisibility": "visible",
+  "tabbar.enhancedPreview": "enhanced",
+  },
+  "editor":{
+   "fontSize": 20,
+  "quickSuggestions": {
+    "other": false,
+    "comments": false,
+    "strings": false
+  },
+  "fontFamily": "'JetBrains Mono', 'monospace', monospace",
+  "wordWrap": "wordWrapColumn",
+    "bracketPairColorization": {
+    "enabled": true,
+    "independentColorPoolPerBracketType": true,
+  }
+  },
+  "codeActionWidget.includeNearbyQuickfixes": true,
+  "workbench.colorTheme": "arduino-theme-dark",
+  "files.autoSave": "afterDelay",
+  "arduino":{
+   "window.autoScale": true,
+  "compile": {
+   "verbose": false,
+  "warnings": "Default",
+  },
+    "upload": {
+     "verbose": false,
+  "verify": true,
+    },
+  "sketchbook.showAllFiles": true,
+  "cloud.enabled": false,
+  },
+  "notebook.lineNumbers": "on",
+  "search.smartCase": true,
+  "workbench": {
+   "iconTheme": "theia-file-icons",
+  "tree.renderIndentGuides": "always",
+  "editor.highlightModifiedTabs": true,
+  },
+  "window.titleBarStyle": "native",
+  "editor.fontSize": 14,
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": false,
+    "strings": false
+  },
+  "arduino.window.autoScale": true,
+  "window.zoomLevel": 2,
+  "arduino.compile.verbose": true,
+  "arduino.compile.warnings": "None",
+  "arduino.upload.verbose": true,
+  "arduino.upload.verify": false,
+  "arduino.sketchbook.showAllFiles": true,
+}
