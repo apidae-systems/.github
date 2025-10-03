@@ -1,19 +1,26 @@
 #include <Arduino.h>
 #include <pas-co2-ino.hpp>
+/* https://github.com/Infineon/arduino-pas-co2-sensor/tree/master */
 
 /*
- * The sensor supports 100KHz and 400KHz.
- * You hardware setup and pull-ups value will
- * also influence the i2c operation. You can
- * change this value to 100000 in case of
- * communication issues.
+ * sensor supports 100KHz and 400KHz
+ * hardware setup & pull-ups value will * also influence the i2c operation.
+ * change this value to 100000 in case of communication issues
  */
+
 #define I2C_FREQ_HZ 400000
-#define PERIODIC_MEAS_INTERVAL_IN_SECONDS                                      \
-  10 /* demo-mode value; not recommended for long-term measurements */
-// #define PERIODIC_MEAS_INTERVAL_IN_SECONDS 60L /* specification value for
-// stable operation (uncomment for long-time-measurements) */
+/* demo-mode value; not recommended for long-term measurements */
+/* #define PERIODIC_MEAS_INTERVAL_IN_SECONDS 10 */
+/* specification value for stable operation (uncomment for
+ * long-time-measurements) */
+#define PERIODIC_MEAS_INTERVAL_IN_SECONDS 60L
 #define PRESSURE_REFERENCE 900
+
+/*
+ * Calibration flag: set to 1 when exposing sensor to 400 ppm reference
+ */
+#define CALIBRATION_MODE 1
+#define CALIBRATION_TARGET_PPM 400
 
 /*
  * Create CO2 object. Unless otherwise specified,
@@ -29,11 +36,11 @@ void setup() {
   delay(800);
   Serial.println("serial initialized");
 
-  /* Initialize i2c interface used by the sensor */
+  /* initialize i2c interface used by sensor */
   Wire.begin();
   Wire.setClock(I2C_FREQ_HZ);
 
-  /* Initialize sensor */
+  /* initialize sensor */
   err = cotwo.begin();
 
   if (XENSIV_PASCO2_OK != err) {
@@ -41,15 +48,26 @@ void setup() {
     Serial.println(err);
   }
   /* set reference pressure before starting measurement */
-
   err = cotwo.setPressRef(PRESSURE_REFERENCE);
   if (XENSIV_PASCO2_OK != err) {
     Serial.print("pressure reference error: ");
     Serial.println(err);
   }
 
-  /* measure every 60 seconds */
+#if CALIBRATION_MODE
+  /* perform forced recalibration at known reference concentration */
+  err = cotwo.performForcedRecalibration(CALIBRATION_TARGET_PPM);
+  if (XENSIV_PASCO2_OK != err) {
+    Serial.print("calibration error: ");
+    Serial.println(err);
+  } else {
+    Serial.print("calibrated to ");
+    Serial.print(CALIBRATION_TARGET_PPM);
+    Serial.println(" ppm");
+  }
+#endif
 
+  /* measure every 60 seconds */
   err = cotwo.startMeasure(PERIODIC_MEAS_INTERVAL_IN_SECONDS);
   if (XENSIV_PASCO2_OK != err) {
     Serial.print("start measure error: ");
