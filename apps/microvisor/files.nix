@@ -1,3 +1,9 @@
+let
+  VERSIONS = rec {
+    NIX = "nix (Lix, like Nix) 2.93.3";
+    DEVENV = "1.9.1";
+  };
+in
 {
   files = {
     "apps/microvisor/env_spec.sh" = {
@@ -8,7 +14,7 @@
           It "using Lix implementation"
             When run nix --version
             The status should be success
-            The line 1 should include "nix (Lix, like Nix) 2.93.3"
+            The line 1 should include "${VERSIONS.NIX}"
           End
         End
 
@@ -16,10 +22,10 @@
         # or
         # nix upgrade-nix
         Describe "🟦 Devenv should be:"
-          It "greater than or equal to version 1.9.0"
+          It "greater than or equal to version ${VERSIONS.DEVENV}"
             When run devenv
             The status should be success
-            The output should include '1.9.0'
+            The output should include '${VERSIONS.DEVENV}'
           End
         End
 
