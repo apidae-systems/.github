@@ -1,0 +1,22 @@
+profiles:
+  apidae:
+    notes: Scaffolding code for a simple micro SD on esp32s3
+    fqbn: esp32:esp32:esp32s3
+    port: /dev/cu.SLAB_USBtoUART
+    port_config:
+      baudrate: 115200
+    platforms:
+      - platform: esp32:esp32 (3.3.0)
+    libraries:
+      - SdFat (2.3.0)
+      # - SdFat - Adafruit Fork (2.3.54)
+      # - Adafruit BusIO (1.17.4)
+    verbose: true
+
+default_port_config:
+  baudrate: 115200
+default_profile: apidae
+default_protocol: serial
+default_port: /dev/cu.SLAB_USBtoUART
+default_programmer: esptool
+default_fqbn: esp32:esp32:esp32s3
