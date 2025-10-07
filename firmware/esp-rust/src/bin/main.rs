@@ -6,31 +6,131 @@
     holding buffers for the duration of a data transfer."
 )]
 
-use bt_hci::controller::ExternalController;
-use defmt::info;
-use embassy_executor::Spawner;
-use embassy_time::{Duration, Timer};
-use esp_hal::clock::CpuClock;
-use esp_hal::timer::systimer::SystemTimer;
-use esp_hal::timer::timg::TimerGroup;
-use esp_wifi::ble::controller::BleConnector;
-use {esp_backtrace as _, esp_println as _};
+use {
+    bt_hci::controller::ExternalController,
+    defmt::info,
+    embassy_executor::Spawner,
+    embassy_time::{Duration, Timer},
+    esp_hal::{
+        clock::CpuClock,
+        timer::{systimer::SystemTimer, timg::TimerGroup},
+    },
+    esp_wifi::{
+        ble::controller::BleConnector,
+        wifi::{ClientConfiguration, Configuration},
+    },
+    embassy_net::{
+        self as net, tcp::TcpSocket, Config as NetConfig, IpAddress, IpEndpoint, Stack,
+        StackResources,
+    },
+    static_cell::StaticCell,
+    alloc::{boxed::Box, string::String},
+    esp_backtrace as _,
+    esp_println as _,
+};
 
 extern crate alloc;
 
-// This creates a default app-descriptor required by the esp-idf bootloader.
-// For more information see: <https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/system/app_image_format.html#application-description>
 esp_bootloader_esp_idf::esp_app_desc!();
+
+const WIFI_SSID: &str = "IT HURTS WHEN IP 2.4G";
+const WIFI_PASSWORD: &str = "itreallyhurtswhenip";
+
+const SERVER_PORT: u16 = 80;
+const RX_BUF_SIZE: usize = 1024;
+const TX_BUF_SIZE: usize = 1024;
+const TRASH_BUF_SIZE: usize = 512;
+
+static NET_RESOURCES: StaticCell<StackResources<3>> = StaticCell::new();
+
+#[embassy_executor::task]
+async fn net_task(mut runner: net::Runner<'static, esp_wifi::wifi::WifiDevice<'static>>) -> ! {
+    runner.run().await
+}
+
+fn fmt_ip(ep: Option<IpEndpoint>) -> heapless::String<64> {
+    match ep {
+        Some(IpEndpoint { addr: IpAddress::Ipv4(v4), .. }) => {
+            let [a, b, c, d] = v4.octets();
+            let mut s = heapless::String::<64>::new();
+            let _ = core::fmt::write(&mut s, format_args!("{a}.{b}.{c}.{d}"));
+            s
+        }
+        _ => {
+            let mut s = heapless::String::<64>::new();
+            let _ = s.push_str("unknown");
+            s
+        }
+    }
+}
+
+fn build_body(ip: &str) -> heapless::String<512> {
+    let mut s = heapless::String::<512>::new();
+    let _ = core::fmt::write(
+        &mut s,
+        format_args!(
+            concat!(
+                "<!doctype html>",
+                "<meta charset='utf-8'>",
+                "<meta name='viewport' content='width=device-width,initial-scale=1'>",
+                "<title>ESP32 Hello</title>",
+                "<h1>ESP32 says hi 👋</h1>",
+                "<p>Your IP: <b>{}</b></p>"
+            ),
+            ip
+        ),
+    );
+    s
+}
+
+fn build_headers(len: usize) -> heapless::String<128> {
+    let mut s = heapless::String::<128>::new();
+    let _ = core::fmt::write(
+        &mut s,
+        format_args!(
+            "HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\nContent-Length: {}\r\nConnection: close\r\n\r\n",
+            len
+        ),
+    );
+    s
+}
+
+#[embassy_executor::task]
+async fn http_server(stack: Stack<'static>) {
+    info!("HTTP server listening on :80");
+
+    let mut rx_buf = [0u8; RX_BUF_SIZE];
+    let mut tx_buf = [0u8; TX_BUF_SIZE];
+
+    loop {
+        let mut sock = TcpSocket::new(stack, &mut rx_buf, &mut tx_buf);
+        if let Err(e) = sock.accept(SERVER_PORT).await {
+            info!("accept error: {:?}", defmt::Debug2Format(&e));
+            continue;
+        }
+
+        let ip_str = fmt_ip(sock.remote_endpoint());
+        info!("HTTP connection from {}", ip_str.as_str());
+
+        let mut trash = [0u8; TRASH_BUF_SIZE];
+        let _ = sock.read(&mut trash).await;
+
+        let body = build_body(ip_str.as_str());
+        let headers = build_headers(body.len());
+
+        let _ = sock.write(headers.as_bytes()).await;
+        let _ = sock.write(body.as_bytes()).await;
+        let _ = sock.flush().await;
+        sock.close();
+    }
+}
 
 #[esp_hal_embassy::main]
 async fn main(spawner: Spawner) {
-    // generator version: 0.5.0
-
     let config = esp_hal::Config::default().with_cpu_clock(CpuClock::max());
     let peripherals = esp_hal::init(config);
 
     esp_alloc::heap_allocator!(size: 64 * 1024);
-    // COEX needs more RAM - so we've added some more
     esp_alloc::heap_allocator!(#[unsafe(link_section = ".dram2_uninit")] size: 64 * 1024);
 
     let timer0 = SystemTimer::new(peripherals.SYSTIMER);
@@ -38,23 +138,68 @@ async fn main(spawner: Spawner) {
 
     info!("Embassy initialized!");
 
-    let rng = esp_hal::rng::Rng::new(peripherals.RNG);
+    let mut rng = esp_hal::rng::Rng::new(peripherals.RNG);
     let timer1 = TimerGroup::new(peripherals.TIMG0);
-    let wifi_init =
-        esp_wifi::init(timer1.timer0, rng).expect("Failed to initialize WIFI/BLE controller");
-    let (mut _wifi_controller, _interfaces) = esp_wifi::wifi::new(&wifi_init, peripherals.WIFI)
-        .expect("Failed to initialize WIFI controller");
-    // find more examples https://github.com/embassy-rs/trouble/tree/main/examples/esp32
-    let transport = BleConnector::new(&wifi_init, peripherals.BT);
+    let wifi_init = esp_wifi::init(timer1.timer0, rng).expect("Failed to initialize WIFI/BLE controller");
+    let wifi_init = Box::leak(Box::new(wifi_init));
+
+    let (mut wifi_controller, interfaces) =
+        esp_wifi::wifi::new(&*wifi_init, peripherals.WIFI).expect("Failed to initialize WIFI controller");
+
+    let transport = BleConnector::new(&*wifi_init, peripherals.BT);
     let _ble_controller = ExternalController::<_, 20>::new(transport);
 
-    // TODO: Spawn some tasks
-    let _ = spawner;
+    let ssid: String = WIFI_SSID.into();
+    let password: String = WIFI_PASSWORD.into();
+    wifi_controller
+        .set_configuration(&Configuration::Client(ClientConfiguration { ssid, password, ..Default::default() }))
+        .expect("wifi set_configuration failed");
 
-    loop {
-        info!("Hello world!");
-        Timer::after(Duration::from_secs(1)).await;
+    wifi_controller.start().expect("wifi start failed");
+    wifi_controller.connect().expect("wifi connect failed");
+
+    while !wifi_controller.is_connected().unwrap_or(false) {
+        Timer::after(Duration::from_millis(250)).await;
     }
+    info!("WiFi connected");
 
-    // for inspiration have a look at the examples at https://github.com/esp-rs/esp-hal/tree/esp-hal-v1.0.0-rc.0/examples/src/bin
+    let net_cfg = NetConfig::dhcpv4(Default::default());
+    let resources = NET_RESOURCES.init(StackResources::<3>::new());
+    let seed: u64 = ((rng.random() as u64) << 32) | (rng.random() as u64);
+    let (stack, runner) = net::new(interfaces.sta, net_cfg, resources, seed);
+    let stack_for_log = stack;
+
+    spawner.spawn(net_task(runner)).ok();
+    spawner.spawn(http_server(stack)).expect("spawn http_server");
+
+let mut uptime_s: u64 = 0;
+loop {
+    let connected = wifi_controller.is_connected().unwrap_or(false);
+
+    let ip_str = stack_for_log
+        .config_v4()
+        .map(|c| c.address)
+        .map(|cidr| cidr.address().octets())
+        .map(|[a, b, c, d]| {
+            let mut s = heapless::String::<16>::new();
+            let _ = core::fmt::write(&mut s, format_args!("{a}.{b}.{c}.{d}"));
+            s
+        })
+        .unwrap_or_else(|| {
+            let mut s = heapless::String::<16>::new();
+            let _ = s.push_str("0.0.0.0");
+            s
+        });
+
+    info!(
+        "WiFi | ssid: '{}' | connected: {} | ip: {} | uptime: {}s",
+        WIFI_SSID,
+        connected,
+        ip_str.as_str(),
+        uptime_s
+    );
+
+    uptime_s += 1;
+    Timer::after(Duration::from_secs(1)).await;
+}
 }
