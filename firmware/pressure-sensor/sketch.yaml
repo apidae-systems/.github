@@ -1,0 +1,27 @@
+profiles:
+  apidae:
+    jobs: 0
+    verify: true
+    clean: false
+    upload: true
+    verbose: true
+    export_binaries: true
+    notes: Scaffolding code for Adafruit LPS25 pressure sensor on esp32s3
+    fqbn: esp32:esp32:esp32s3
+    port: /dev/cu.SLAB_USBtoUART
+    port_config:
+      baudrate: 115200
+    platforms:
+      - platform: esp32:esp32 (3.3.0)
+    libraries:
+      - Adafruit BusIO (1.17.4)
+      - Adafruit LPS2X (2.0.6)
+      - Adafruit Unified Sensor (1.1.15)
+
+default_port_config:
+  baudrate: 115200
+default_profile: apidae
+default_protocol: serial
+default_port: /dev/cu.SLAB_USBtoUART
+default_programmer: esptool
+default_fqbn: esp32:esp32:esp32s3
