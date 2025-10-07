@@ -89,6 +89,7 @@ Thumbs.db
 !.vscode/launch.json
 !.vscode/extensions.json
 !.vscode/settings-example.json
+!firmware/esp-rust/src/bin
 apps/microvisor/services/supabase/.branches
 apps/microvisor/env_spec.sh
 /typings

@@ -12,10 +12,10 @@
       esptool
       esphome
       espflash
-      probe-rs
+      # probe-rs
       esp-generate
       cargo-espmonitor
-      cp210x-program # needed for macOS serial connection to ESP32
+      # cp210x-program # needed for macOS serial connection to ESP32
 
       ninja
       ccache
