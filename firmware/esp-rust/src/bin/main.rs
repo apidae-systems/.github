@@ -33,9 +33,6 @@ extern crate alloc;
 
 esp_bootloader_esp_idf::esp_app_desc!();
 
-const WIFI_SSID: &str = "IT HURTS WHEN IP 2.4G";
-const WIFI_PASSWORD: &str = "itreallyhurtswhenip";
-
 const SERVER_PORT: u16 = 80;
 const RX_BUF_SIZE: usize = 1024;
 const TX_BUF_SIZE: usize = 1024;
@@ -98,7 +95,6 @@ fn build_headers(len: usize) -> heapless::String<128> {
 #[embassy_executor::task]
 async fn http_server(stack: Stack<'static>) {
     info!("HTTP server listening on :80");
-
     let mut rx_buf = [0u8; RX_BUF_SIZE];
     let mut tx_buf = [0u8; TX_BUF_SIZE];
 
@@ -113,93 +109,86 @@ async fn http_server(stack: Stack<'static>) {
         info!("HTTP connection from {}", ip_str.as_str());
 
         let mut trash = [0u8; TRASH_BUF_SIZE];
-        let _ = sock.read(&mut trash).await;
+        if let Err(e) = sock.read(&mut trash).await {
+            info!("read request error: {:?}", defmt::Debug2Format(&e));
+        }
 
         let body = build_body(ip_str.as_str());
         let headers = build_headers(body.len());
 
-        let _ = sock.write(headers.as_bytes()).await;
-        let _ = sock.write(body.as_bytes()).await;
-        let _ = sock.flush().await;
+        if let Err(e) = sock.write(headers.as_bytes()).await {
+            info!("write headers error: {:?}", defmt::Debug2Format(&e));
+        }
+        if let Err(e) = sock.write(body.as_bytes()).await {
+            info!("write body error: {:?}", defmt::Debug2Format(&e));
+        }
+        if let Err(e) = sock.flush().await {
+            info!("flush error: {:?}", defmt::Debug2Format(&e));
+        }
         sock.close();
     }
 }
 
 #[esp_hal_embassy::main]
 async fn main(spawner: Spawner) {
-    let config = esp_hal::Config::default().with_cpu_clock(CpuClock::max());
-    let peripherals = esp_hal::init(config);
-
+    let peripherals = esp_hal::init(esp_hal::Config::default().with_cpu_clock(CpuClock::max()));
     esp_alloc::heap_allocator!(size: 64 * 1024);
     esp_alloc::heap_allocator!(#[unsafe(link_section = ".dram2_uninit")] size: 64 * 1024);
-
-    let timer0 = SystemTimer::new(peripherals.SYSTIMER);
-    esp_hal_embassy::init(timer0.alarm0);
-
+    esp_hal_embassy::init(SystemTimer::new(peripherals.SYSTIMER).alarm0);
     info!("Embassy initialized!");
 
+    let WIFI_SSID = option_env!("WIFI_SSID").unwrap_or("IT HURTS WHEN IP 2.4G");
+    let WIFI_PSK = option_env!("WIFI_PSK").unwrap_or("itreallyhurtswhenip");
+
     let mut rng = esp_hal::rng::Rng::new(peripherals.RNG);
-    let timer1 = TimerGroup::new(peripherals.TIMG0);
-    let wifi_init = esp_wifi::init(timer1.timer0, rng).expect("Failed to initialize WIFI/BLE controller");
-    let wifi_init = Box::leak(Box::new(wifi_init));
+    let wifi_init = Box::leak(Box::new(
+        esp_wifi::init(TimerGroup::new(peripherals.TIMG0).timer0, rng)
+            .expect("Failed to initialize WIFI/BLE controller"),
+    ));
 
     let (mut wifi_controller, interfaces) =
         esp_wifi::wifi::new(&*wifi_init, peripherals.WIFI).expect("Failed to initialize WIFI controller");
-
-    let transport = BleConnector::new(&*wifi_init, peripherals.BT);
-    let _ble_controller = ExternalController::<_, 20>::new(transport);
+    let _ble_controller = ExternalController::<_, 20>::new(BleConnector::new(&*wifi_init, peripherals.BT));
 
     let ssid: String = WIFI_SSID.into();
-    let password: String = WIFI_PASSWORD.into();
+    let password: String = WIFI_PSK.into();
     wifi_controller
         .set_configuration(&Configuration::Client(ClientConfiguration { ssid, password, ..Default::default() }))
         .expect("wifi set_configuration failed");
-
     wifi_controller.start().expect("wifi start failed");
     wifi_controller.connect().expect("wifi connect failed");
 
     while !wifi_controller.is_connected().unwrap_or(false) {
         Timer::after(Duration::from_millis(250)).await;
     }
+
     info!("WiFi connected");
 
-    let net_cfg = NetConfig::dhcpv4(Default::default());
     let resources = NET_RESOURCES.init(StackResources::<3>::new());
     let seed: u64 = ((rng.random() as u64) << 32) | (rng.random() as u64);
-    let (stack, runner) = net::new(interfaces.sta, net_cfg, resources, seed);
+    let (stack, runner) = net::new(interfaces.sta, NetConfig::dhcpv4(Default::default()), resources, seed);
     let stack_for_log = stack;
 
     spawner.spawn(net_task(runner)).ok();
     spawner.spawn(http_server(stack)).expect("spawn http_server");
 
-let mut uptime_s: u64 = 0;
-loop {
-    let connected = wifi_controller.is_connected().unwrap_or(false);
+    let mut uptime_s: u64 = 0;
 
-    let ip_str = stack_for_log
-        .config_v4()
-        .map(|c| c.address)
-        .map(|cidr| cidr.address().octets())
-        .map(|[a, b, c, d]| {
-            let mut s = heapless::String::<16>::new();
-            let _ = core::fmt::write(&mut s, format_args!("{a}.{b}.{c}.{d}"));
-            s
-        })
-        .unwrap_or_else(|| {
-            let mut s = heapless::String::<16>::new();
-            let _ = s.push_str("0.0.0.0");
-            s
-        });
+    loop {
+        let connected = wifi_controller.is_connected().unwrap_or(false);
+        let ip = stack_for_log.config_v4().map(|c| c.address.address().octets());
+        match ip {
+            Some([a, b, c, d]) => info!(
+                "WiFi | ssid: '{}' | connected: {} | ip: {}.{}.{}.{} | uptime: {}s",
+                WIFI_SSID, connected, a, b, c, d, uptime_s
+            ),
+            None => info!(
+                "WiFi | ssid: '{}' | connected: {} | ip: 0.0.0.0 | uptime: {}s",
+                WIFI_SSID, connected, uptime_s
+            ),
+        }
 
-    info!(
-        "WiFi | ssid: '{}' | connected: {} | ip: {} | uptime: {}s",
-        WIFI_SSID,
-        connected,
-        ip_str.as_str(),
-        uptime_s
-    );
-
-    uptime_s += 1;
-    Timer::after(Duration::from_secs(1)).await;
-}
+        uptime_s += 1;
+        Timer::after(Duration::from_secs(1)).await;
+    }
 }
