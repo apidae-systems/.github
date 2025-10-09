@@ -100,3 +100,4 @@ config/env_spec.sh
 
 .claude
 .pio
+.ccls

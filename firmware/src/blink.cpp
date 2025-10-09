@@ -1,14 +1,16 @@
+#include <Arduino.h>
+
 #define LED_R 39
 #define LED_Y 38
 #define LED_G 37
 
-void setup() {
+void blinkSetup() {
   pinMode(LED_R, OUTPUT);
   pinMode(LED_Y, OUTPUT);
   pinMode(LED_G, OUTPUT);
 }
 
-void loop() {
+void blinkLoop() {
   digitalWrite(LED_R, HIGH);
   digitalWrite(LED_Y, LOW);
   digitalWrite(LED_G, LOW);

@@ -1,8 +1,8 @@
-#include <WiFi.h>
-#include <WebServer.h>
 #include <ESPmDNS.h>
+#include <WebServer.h>
+#include <WiFi.h>
 
-const char *ssid     = "IT HURTS WHEN IP";
+const char *ssid = "IT HURTS WHEN IP";
 const char *password = "ithurtswhenip";
 
 WebServer server(80);
@@ -13,14 +13,21 @@ WebServer server(80);
 
 String formatUptime(unsigned long ms) {
   unsigned long s = ms / 1000UL;
-  unsigned long d = s / 86400UL; s %= 86400UL;
-  unsigned long h = s / 3600UL;  s %= 3600UL;
-  unsigned long m = s / 60UL;    s %= 60UL;
+  unsigned long d = s / 86400UL;
+  s %= 86400UL;
+  unsigned long h = s / 3600UL;
+  s %= 3600UL;
+  unsigned long m = s / 60UL;
+  s %= 60UL;
   char buf[48];
-  if (d) snprintf(buf, sizeof(buf), "%lud %luh %lum %lus", d, h, m, s);
-  else if (h) snprintf(buf, sizeof(buf), "%luh %lum %lus", h, m, s);
-  else if (m) snprintf(buf, sizeof(buf), "%lum %lus", m, s);
-  else snprintf(buf, sizeof(buf), "%lus", s);
+  if (d)
+    snprintf(buf, sizeof(buf), "%lud %luh %lum %lus", d, h, m, s);
+  else if (h)
+    snprintf(buf, sizeof(buf), "%luh %lum %lus", h, m, s);
+  else if (m)
+    snprintf(buf, sizeof(buf), "%lum %lus", m, s);
+  else
+    snprintf(buf, sizeof(buf), "%lus", s);
   return String(buf);
 }
 
@@ -145,12 +152,13 @@ void handleRoot() {
 </html>
 )rawliteral";
 
-  html.replace("%%IP%%",     WiFi.localIP().toString());
-  html.replace("%%RSSI%%",   String(WiFi.RSSI()));
+  html.replace("%%IP%%", WiFi.localIP().toString());
+  html.replace("%%RSSI%%", String(WiFi.RSSI()));
   html.replace("%%UPTIME%%", formatUptime(millis()));
-  html.replace("%%HEAP%%",   String(ESP.getFreeHeap()));
+  html.replace("%%HEAP%%", String(ESP.getFreeHeap()));
 
-  server.sendHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+  server.sendHeader("Cache-Control",
+                    "no-store, no-cache, must-revalidate, max-age=0");
   server.sendHeader("Pragma", "no-cache");
   server.sendHeader("Content-Encoding", "identity");
   server.send(200, "text/html; charset=utf-8", html);
@@ -185,7 +193,8 @@ void setup() {
   Serial.println();
 
   if (WiFi.status() == WL_CONNECTED) {
-    Serial.print("Connected. IP: "); Serial.println(WiFi.localIP());
+    Serial.print("Connected. IP: ");
+    Serial.println(WiFi.localIP());
   } else {
     Serial.println("WiFi connect timeout. Check 2.4GHz/WPA2 and password.");
   }

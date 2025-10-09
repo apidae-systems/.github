@@ -9,7 +9,7 @@
 
 Adafruit_LPS25 lps;
 
-void setup(void) {
+void pressureSetup() {
   Serial.begin(115200);
   delay(1000);
   Serial.println("Adafruit LPS25 test (SPI mode)!");
@@ -18,11 +18,11 @@ void setup(void) {
     Serial.println("Failed to find LPS25 chip");
     while (1)
       delay(10);
-  }
+  };
   Serial.println("LPS25 Found!");
-}
+};
 
-void loop() {
+void pressureLoop() {
   sensors_event_t temp, pressure;
   lps.getEvent(&pressure, &temp);
 
@@ -35,4 +35,4 @@ void loop() {
   Serial.println(" hPa\n");
 
   delay(500);
-}
+};
