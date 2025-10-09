@@ -5,14 +5,12 @@
     pull = [
       "devenv"
       "cachix"
-      "nixvim"
       "oxalica"
       "nixpkgs"
       "mfarabi"
-      "apidae-systems"
-      "emacs-ci"
       "nix-darwin"
       "nix-community"
+      "apidae-systems"
       "pre-commit-hooks"
     ];
   };

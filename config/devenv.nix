@@ -26,6 +26,11 @@ let
     GRAPH = "4211";
     ADMIN = "8000";
     POSTGRES = "54322";
+    SERIAL = {
+     CALL_UP = "/dev/cu.";
+     SLAB_USB_TO_UART = "SLAB_USBtoUART"; # Silicon Labs CP210x USB-to-UART bridge chip family
+     USB_SERIAL = "usbserial-110";
+    };
   };
 
   URLS = rec {
@@ -42,7 +47,7 @@ in
 {
   imports = [
     ./cachix.nix
-    ./files.nix
+    ./files
     ./languages
     ./packages.nix
     # ./git-hooks.nix
@@ -201,6 +206,7 @@ in
 
   enterShell = ''
     hello
+    dev:list
   '';
 
   tasks = {

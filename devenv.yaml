@@ -13,6 +13,8 @@ inputs:
     inputs:
       nixpkgs:
         follows: nixpkgs
+
 allowUnfree: true
+
 imports:
-- ./apps/microvisor
+- ./config

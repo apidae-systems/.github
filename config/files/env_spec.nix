@@ -6,7 +6,7 @@ let
 in
 {
   files = {
-    "apps/microvisor/env_spec.sh" = {
+    "tests/env_spec.sh" = {
       executable = true;
       text = ''
         # nix upgrade-nix

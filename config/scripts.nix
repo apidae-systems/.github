@@ -1,4 +1,7 @@
-{ config, pkgs, ... }:
+{ config,
+  pkgs,
+  ...
+}:
 {
   scripts = {
     hello = {
@@ -23,7 +26,16 @@
       description = " 💊 Run Microdoctor health-check suite with docs output";
       exec = ''
         figlet -cf slant "💊 Microdoctor";
-        shellspec -c "${config.env.DEVENV_ROOT}/apps/microvisor" --quiet "$@";
+        shellspec -c "${config.env.DEVENV_ROOT}/tests" --quiet "$@";
+      '';
+    };
+
+    "dev:list" = {
+      description = "🔌 View available serial ports";
+      exec = ''
+        # ls /dev/{cu,tty}.*
+        # ls /dev/cu.*
+        pio device list
       '';
     };
 

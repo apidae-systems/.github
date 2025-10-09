@@ -82,6 +82,7 @@ Thumbs.db
 .classpath
 .c9
 *.launch
+
 .vscode/*
 .settings
 !.vscode/settings.json
@@ -90,10 +91,12 @@ Thumbs.db
 !.vscode/extensions.json
 !.vscode/settings-example.json
 !firmware/esp-rust/src/bin
-apps/microvisor/services/supabase/.branches
-apps/microvisor/env_spec.sh
+config/services/supabase/.branches
+config/env_spec.sh
+.shellspec
+
 /typings
 /libpeerconnection.log
+
 .claude
-apps/microvisor/env_spec.sh
-.shellspec
+.pio

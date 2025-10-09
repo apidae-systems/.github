@@ -6,16 +6,24 @@
   packages =
     with pkgs;
     [
-      binsider
+      binsider # binary inspector TUI
+
+      # embuild
+      # cargo-pio
+      platformio # nixos.wiki/wiki/Platformio
 
       espup
       esptool
       esphome
       espflash
-      # probe-rs
+      # probe-rs # connect to debug probes
       esp-generate
       cargo-espmonitor
       # cp210x-program # needed for macOS serial connection to ESP32
+       
+      # python313Packages.atopile # circuit boards as code
+      
+      tinygo
 
       ninja
       ccache
