@@ -24,6 +24,7 @@
       # python313Packages.atopile # circuit boards as code
 
       tinygo
+      openocd # Flash STM32
       avrdude # flash Arduinos
 
       ninja
